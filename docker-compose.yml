@@ -1,0 +1,38 @@
+#
+# メインコンテナ
+#
+main:
+  build: .
+
+  volumes:
+   - .:/products
+
+  ports:
+    - "3000:3000"
+
+#
+# MySQLのコンテナ
+#
+# コンテナへのアクセスは
+# $> docker exec -i -t [コンテナID] /bin/bash
+#
+# MySQLへのアクセスは
+# $> mysql -uroot -p -hmysql
+#
+# macからは
+# $> mysql -uroot -p -hlocal-vm(hostsにlocal-vmを設定した場合)
+#
+mysql:
+  image: mysql:5.5
+
+  environment:
+    - MYSQL_ROOT_PASSWORD=root
+
+  ports:
+    - "3306:3306"
+
+redis:
+  image: redis:latest
+
+  ports:
+    - "6380:6380"

@@ -8,13 +8,19 @@ MAINTAINER Gen Takahashi "gendosu@gmail.com"
 
 ENV PATH=$PATH:/usr/local/rbenv/shims
 
-RUN apt-get update \
+RUN apt-get -y install software-properties-common \
+&&  add-apt-repository -y universe
+RUN add-apt-repository -y ppa:groonga/ppa \
+&&  apt-get update \
 &&  apt-get -y upgrade \
 &&  apt-get -y --force-yes install \
   ttf-kochi-gothic \
   imagemagick \
   language-pack-ja \
-  fonts-migmix
+  fonts-migmix \
+  software-properties-common \
+  libgroonga-dev \
+  groonga-tokenizer-mecab
 
 RUN mkdir -p /products
 WORKDIR /products

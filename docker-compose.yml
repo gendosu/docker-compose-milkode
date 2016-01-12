@@ -2,7 +2,8 @@
 # メインコンテナ
 #
 main:
-  build: .
+  image: gendosu/milkode
+#  build: .
 
   volumes:
    - .:/products

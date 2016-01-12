@@ -6,6 +6,8 @@ FROM      gendosu/ubuntu-ruby:1.9.3
 
 MAINTAINER Gen Takahashi "gendosu@gmail.com"
 
+ENV PATH=$PATH:/usr/local/rbenv/shims
+
 RUN apt-get update \
 &&  apt-get -y upgrade \
 &&  apt-get -y --force-yes install \

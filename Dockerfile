@@ -28,4 +28,6 @@ WORKDIR /products
 ADD Gemfile /products/Gemfile
 ADD Gemfile.lock /products/Gemfile.lock
 
+# ENV MILKODE_DEFAULT_DIR=/products
+
 RUN eval "$(rbenv init -)"; bundle

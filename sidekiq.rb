@@ -27,6 +27,22 @@ class EmptyWorker
   end
 end
 
+class CrawlWorker
+  include Sidekiq::Worker
+
+  def perform
+    # リポジトリをクロールする
+  end
+end
+
+class CrawlListWorker
+  include Sidekiq::Worker
+
+  def perform
+    # クロールするリポジトリの一覧を更新する
+  end
+end
+
 class TimedWorker
   include Sidekiq::Worker
 

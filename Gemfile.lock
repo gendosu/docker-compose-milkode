@@ -5,6 +5,8 @@ GEM
     archive-zip (0.8.0)
       io-like (~> 0.3.0)
     coderay (1.1.0)
+    concurrent-ruby (1.0.0)
+    connection_pool (2.2.0)
     daemons (1.2.3)
     eventmachine (1.0.8)
     gqtp (1.0.6)
@@ -45,6 +47,9 @@ GEM
     rack (1.6.4)
     rack-protection (1.5.3)
       rack
+    redis (3.2.2)
+    redis-namespace (1.5.2)
+      redis (~> 3.0, >= 3.0.4)
     rroonga (5.0.9)
       archive-zip
       groonga-client (>= 0.0.3)
@@ -53,6 +58,10 @@ GEM
     sane (0.25.8)
       os (~> 0)
     sass (3.4.20)
+    sidekiq (4.0.2)
+      concurrent-ruby (~> 1.0)
+      connection_pool (~> 2.2, >= 2.2.0)
+      redis (~> 3.2, >= 3.2.1)
     sinatra (1.4.6)
       rack (~> 1.4)
       rack-protection (~> 1.4)
@@ -75,6 +84,10 @@ PLATFORMS
 DEPENDENCIES
   milkode
   pry
+  redis
+  redis-namespace
+  sidekiq
+  sinatra
 
 BUNDLED WITH
    1.11.2

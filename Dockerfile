@@ -20,7 +20,8 @@ RUN add-apt-repository -y ppa:groonga/ppa \
   fonts-migmix \
   software-properties-common \
   libgroonga-dev \
-  groonga-tokenizer-mecab
+  groonga-tokenizer-mecab \
+  redis-tools
 
 RUN mkdir -p /products
 WORKDIR /products

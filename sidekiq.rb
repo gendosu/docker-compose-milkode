@@ -1,9 +1,26 @@
+require 'open3'
+require 'sidekiq/web'
+require 'uri'
+require 'milkode/common/util'
+
+@redis_url = 'redis://redis/0/'
+
+include Milkode::Util
+
 Sidekiq.configure_client do |config|
-  config.redis = { :url => 'redis://redis/0/', :size => 2, :namespace => 'foo' }
+  config.redis = { :url => @redis_url, :size => 2, :namespace => 'foo' }
 end
 Sidekiq.configure_server do |config|
-  config.redis = { :url => 'redis://redis/0/', :namespace => 'foo' }
-  config.on(:startup) { }
+  config.redis = { :url => @redis_url, :namespace => 'foo' }
+
+  config.on(:startup) do
+    p 'clear queue'
+    queue = Sidekiq::Queue.new
+    queue.clear
+
+    CrawlListWorker.perform_async
+  end
+
   config.on(:quiet) { }
   config.on(:shutdown) do
     #result = RubyProf.stop
@@ -17,7 +34,6 @@ Sidekiq.configure_server do |config|
   end
 end
 
-require 'sidekiq/web'
 Sidekiq::Web.app_url = '/'
 
 class EmptyWorker
@@ -30,16 +46,62 @@ end
 class CrawlWorker
   include Sidekiq::Worker
 
-  def perform
+  def perform(repository)
+    redis_url = 'redis://redis/0/'
     # リポジトリをクロールする
+    # redisにクロールするリポジトリ一覧持つかな。。
+    #   リスト追加
+    #     redis.lpushx('crawl_list', 'http://github.com/gendosu/test.git')
+    #   リスト取得
+    #     redis.lrange('crawl_list', 0, -1)
+    #   キュー削除
+    #     queues = Sidekiq::Queue.new('foo')
+    #     queues.clear
+    redis = Redis.new(:url => redis_url)
+
+    redis.lrem('crawl_list', 0, repository)
+    redis.lpush('crawl_list', repository)
+
+    if(git_url?(repository))
+      repository_name = repository.gsub(/^[^:]*:/, '').gsub(/^\//, "").gsub(/\//, "_")
+    else
+      uri = URI.parse(repository)
+      repository_name = (uri.path + (uri.query || '')).gsub(/^\//, "").gsub(/\//, "_")
+    end
+
+    Open3.popen3("milk add --name=#{repository_name} #{repository}") do |stdin, stdout, stderr, wait_thr|
+      if stdout.read.include?('already exist')
+        system("milk update #{repository_name}")
+      end
+      p stderr.read
+    end
+
+    p redis.lrange('crawl_list', 0, -1)
   end
 end
 
 class CrawlListWorker
   include Sidekiq::Worker
 
-  def perform
-    # クロールするリポジトリの一覧を更新する
+  def perform()
+    redis_url = 'redis://redis/0/'
+    # リポジトリをクロールする
+    # redisにクロールするリポジトリ一覧持つかな。。
+    #   リスト追加
+    #     redis.lpushx('crawl_list', 'http://github.com/gendosu/test.git')
+    #   リスト取得
+    #     redis.lrange('crawl_list', 0, -1)
+    #   キュー削除
+    #     queues = Sidekiq::Queue.new('foo')
+    #     queues.clear
+    redis = Redis.new(:url => redis_url)
+
+    repositories = redis.lrange('crawl_list', 0, -1)
+
+    repositories.each do |repo|
+      p repo
+      CrawlWorker.perform_async(repo)
+    end
   end
 end
 

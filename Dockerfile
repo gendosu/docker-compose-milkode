@@ -2,7 +2,7 @@
 #
 # VERSION               0.0.1
 
-FROM      gendosu/ubuntu-ruby:2.1.2
+FROM      gendosu/ubuntu-ruby:2.2.2
 
 MAINTAINER Gen Takahashi "gendosu@gmail.com"
 

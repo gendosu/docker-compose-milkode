@@ -10,6 +10,7 @@ include Milkode::Util
 Sidekiq.configure_client do |config|
   config.redis = { :url => @redis_url, :size => 2, :namespace => 'foo' }
 end
+
 Sidekiq.configure_server do |config|
   config.redis = { :url => @redis_url, :namespace => 'foo' }
 

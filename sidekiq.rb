@@ -77,6 +77,7 @@ class CrawlWorker
       end
     end
 
+    CrawlWorker.perform_in( 60 * 60 * 24, repository)
   end
 end
 

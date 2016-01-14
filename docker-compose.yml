@@ -11,5 +11,5 @@ main:
   ports:
     - "9292:9292"
 
-  command: bundle exec milk web -n -o 0.0.0.0 --db=/products/.milkode
+  command: bundle exec milk web -n -o 0.0.0.0
 

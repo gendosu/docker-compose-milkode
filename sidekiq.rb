@@ -17,6 +17,8 @@ Sidekiq.configure_server do |config|
   config.on(:startup) do
     queue = Sidekiq::Queue.new
     queue.clear
+    ss = Sidekiq::ScheduledSet.new
+    ss.clear
 
     CrawlListWorker.perform_async
   end

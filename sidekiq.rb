@@ -63,7 +63,7 @@ class CrawlWorker
     redis.lpush('crawl_list', repository)
 
     if(git_url?(repository))
-      repository_name = repository.gsub(/^[^:]*:/, '').gsub(/^\//, "").gsub(/\//, "_")
+      repository_name = repository.gsub(/^[^:]*:/, '').gsub(/^\//, "").gsub(/\//, "_").gsub(/\.git$/, "")
     else
       uri = URI.parse(repository)
       repository_name = (uri.path + (uri.query || '')).gsub(/^\//, "").gsub(/\//, "_")

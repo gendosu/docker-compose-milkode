@@ -15,7 +15,6 @@ Sidekiq.configure_server do |config|
   config.redis = { :url => @redis_url, :namespace => 'foo' }
 
   config.on(:startup) do
-    p 'clear queue'
     queue = Sidekiq::Queue.new
     queue.clear
 
@@ -74,10 +73,8 @@ class CrawlWorker
       if stdout.read.include?('already exist')
         system("milk update #{repository_name}")
       end
-      p stderr.read
     end
 
-    p redis.lrange('crawl_list', 0, -1)
   end
 end
 
@@ -100,7 +97,6 @@ class CrawlListWorker
     repositories = redis.lrange('crawl_list', 0, -1)
 
     repositories.each do |repo|
-      p repo
       CrawlWorker.perform_async(repo)
     end
   end

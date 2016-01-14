@@ -98,8 +98,8 @@ class CrawlListWorker
 
     repositories = redis.lrange('crawl_list', 0, -1)
 
-    repositories.each do |repo|
-      CrawlWorker.perform_async(repo)
+    repositories.each_with_index do |repo, index|
+      CrawlWorker.perform_in(index+ 1, repo)
     end
   end
 end

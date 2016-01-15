@@ -8,7 +8,8 @@ MAINTAINER Gen Takahashi "gendosu@gmail.com"
 
 ENV PATH=$PATH:/usr/local/rbenv/shims
 
-RUN apt-get -y install software-properties-common \
+RUN apt-get update \
+&&  apt-get -y install software-properties-common \
 &&  add-apt-repository -y universe
 RUN add-apt-repository -y ppa:groonga/ppa \
 &&  apt-get update \

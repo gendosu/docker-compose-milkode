@@ -38,12 +38,6 @@ end
 
 Sidekiq::Web.app_url = '/'
 
-class EmptyWorker
-  include Sidekiq::Worker
-
-  def perform
-  end
-end
 
 class CrawlWorker
   include Sidekiq::Worker
@@ -108,14 +102,5 @@ class CrawlListWorker
       p "add: #{repo}, #{index}"
       CrawlWorker.perform_in(index+ 1, repo)
     end
-  end
-end
-
-class TimedWorker
-  include Sidekiq::Worker
-
-  def perform(start)
-    now = Time.now.to_f
-    puts "Latency: #{now - start} sec"
   end
 end

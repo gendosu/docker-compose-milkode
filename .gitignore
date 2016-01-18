@@ -2,3 +2,4 @@ milkode/
 .milkode/
 gitlab/
 .ssh
+sidekiq

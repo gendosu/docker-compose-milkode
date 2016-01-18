@@ -15,7 +15,7 @@ main:
   links:
     - "redis:redis"
 
-  command: bundle exec milk web -n -o 0.0.0.0
+  command: bundle exec /products/run.sh
 
 redis:
   image: redis

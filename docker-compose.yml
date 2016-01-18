@@ -9,6 +9,7 @@ main:
    - .:/products
 
   ports:
+    - "9000:9000"
     - "9292:9292"
 
   links:

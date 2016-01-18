@@ -82,7 +82,7 @@ class CrawlListWorker
   def perform()
     repositories_yml = YAML.load_file('repository.yml')
 
-    repositories = repositories_yml['repositories']
+    repositories = repositories_yml['repositories'] || []
 
     # redis_url = 'redis://redis/0/'
     # リポジトリをクロールする

@@ -86,7 +86,11 @@ class CrawlListWorker
   include Sidekiq::Worker
 
   def perform()
-    redis_url = 'redis://redis/0/'
+    repositories_yml = YAML.load_file('repository.yml')
+
+    repositories = repositories_yml['repositories']
+
+    # redis_url = 'redis://redis/0/'
     # リポジトリをクロールする
     # redisにクロールするリポジトリ一覧持つかな。。
     #   リスト追加
@@ -96,9 +100,9 @@ class CrawlListWorker
     #   キュー削除
     #     queues = Sidekiq::Queue.new('foo')
     #     queues.clear
-    redis = Redis.new(:url => redis_url)
+    # redis = Redis.new(:url => redis_url)
 
-    repositories = redis.lrange('crawl_list', 0, -1)
+    # repositories = redis.lrange('crawl_list', 0, -1)
 
     repositories.each_with_index do |repo, index|
       p "add: #{repo}, #{index}"

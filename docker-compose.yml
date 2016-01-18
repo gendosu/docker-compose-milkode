@@ -9,7 +9,16 @@ main:
    - .:/products
 
   ports:
+    - "9000:9000"
     - "9292:9292"
 
-  command: bundle exec milk web -n -o 0.0.0.0
+  links:
+    - "redis:redis"
 
+  command: bundle exec /products/run.sh
+
+redis:
+  image: redis
+
+  ports:
+    - "6379:6379"

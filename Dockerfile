@@ -29,6 +29,11 @@ WORKDIR /products
 
 ADD Gemfile /products/Gemfile
 ADD Gemfile.lock /products/Gemfile.lock
+ADD run.sh /products/run.sh
+ADD config.ru /products/config.ru
+ADD config.yml /products/config.yml
+ADD repository.yml /products/repository.yml
+ADD sidekiq.rb /products/sidekiq.rb
 
 # ENV MILKODE_DEFAULT_DIR=/products
 

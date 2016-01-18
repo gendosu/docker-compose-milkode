@@ -71,6 +71,7 @@ class CrawlWorker
       repository_name = (uri.path + (uri.query || '')).gsub(/^\//, "").gsub(/\//, "_")
     end
 
+    p "run milk add --name=#{repository_name} #{repository}"
     Open3.popen3("milk add --name=#{repository_name} #{repository}") do |stdin, stdout, stderr, wait_thr|
       if stdout.read.include?('already exist')
         system("milk update #{repository_name}")
@@ -100,6 +101,7 @@ class CrawlListWorker
     repositories = redis.lrange('crawl_list', 0, -1)
 
     repositories.each_with_index do |repo, index|
+      p "add: #{repo}, #{index}"
       CrawlWorker.perform_in(index+ 1, repo)
     end
   end
